@@ -24,6 +24,7 @@ cd SpikedRHadronAnalyzer
 # Create name string (called dir_name historically)
 dir_name="M"$mass"_CM"$cmEnergy"_pythia8_jobNum"$jobNum
 echo "All files will have the appendage $dir_name"
+echo "generating $events events"
 
 #if [ ! -d "data/$dir_name" ]; then
 #    mkdir -p data/$dir_name
@@ -36,8 +37,8 @@ if [ ! -d "data/" ]; then
 fi
 
 # gen-sim output files
-genSimRoot="gensimM"$mass"_"$events"Events.root"
-genSimOut="gensimM"$mass"_"$events"Events.out"
+genSimRoot=$dir_name"_gensimM"$mass"_"$events"Events.root"
+genSimOut=$dir_name"_gensimM"$mass"_"$events"Events.out"
 
 # digi-L1-digi2ray output files
 digiRawRoot=$dir_name"_digirawM"$mass"_"$events"Events.root"
