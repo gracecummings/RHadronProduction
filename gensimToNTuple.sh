@@ -26,15 +26,17 @@ dir_name="M"$mass"_CM"$cmEnergy"_pythia8_jobNum"$jobNum
 echo "All files will have the appendage $dir_name"
 echo "generating $events events"
 
-#if [ ! -d "data/$dir_name" ]; then
-#    mkdir -p data/$dir_name
-#    echo "creating data/${dir_name}"
-#fi
+ls
 
 if [ ! -d "data/" ]; then
     mkdir -p data/
     echo "creating directory data/"
+else
+    echo "data directory found, printing contents"
+    ls -lh data
 fi
+
+
 
 # gen-sim output files
 genSimRoot=$dir_name"_gensimM"$mass"_"$events"Events.root"
@@ -54,6 +56,9 @@ if [ ! -f data/$genSimRoot ]; then
     echo "Starting step 0: GEN-SIM"
     cmsRun EXO-RunIISummer20UL18GENSIM-00010_1_cfg_v3.py maxEvents=$events seeded=$seeded mass=$mass cmEnergy=$cmEnergy outputFile=data/$genSimRoot
     echo "Step 0 completed"
+else
+    echo "Gensim file found printing contents"
+    ls -lh data
 fi
 
 
@@ -71,6 +76,11 @@ if [ ! -f data/$digiRawRoot ]; then
         --era Run2_2018 \
         -n -1 >& data/$digiRawOut
     echo "Step 1 completed"
+else
+    echo "digi file found file found printing contents"
+    ls -lh data
+    echo "checking input file"
+    echo data/$genSimRoot
 fi
 
 if [ ! -f data/$hltRoot ]; then
@@ -99,6 +109,9 @@ if [ ! -f data/$hltRoot ]; then
         --era Run2_2018 \
         -n -1 >& data/$recoOut
     echo "Step 2 completed"
+else
+    echo "reco file found printing contents"
+    ls -lh data
 fi
 
 if $eventdisplay; then

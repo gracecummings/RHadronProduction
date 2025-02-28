@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#check
+
 export X509_CERT_DIR=/cvmfs/grid.cern.ch/etc/grid-security/certificates/
 
 #Print stuff about the job
@@ -11,9 +13,10 @@ echo "System software: `cat /etc/redhat-release`" #Operating System on that node
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 echo "Untaring  directory with analyzer code"
 tar -xf cmsswTar.tar.gz
-cd CMSSW_10_6_30/src/RHadronProduction
+cd CMSSW_10_6_30/src/
 scram b ProjectRename
 cmsenv
+cd RHadronProduction
 
 #Arguments taken
 #1 - R-hadron mass
@@ -39,13 +42,15 @@ do
     echo "Full path: ${FILE}"
     echo "copying ${FILE##*\/} to eos $3"
     xrdcp ${FILE} $3/${FILE##*\/}
-    #XRDEXIT=$?
-    #if [[ $XRDEXIT -ne 0 ]]; then
-	#rm ${FILE}
-	#echo "failure in xrdcp, exit code $XRDEXIT"
-	#exit $XRDEXIT
-    #fi
-    #rm ${FILE}
+    XRDEXIT=$?
+    if [[ $XRDEXIT -ne 0 ]]; then
+	echo "failure in xrdcp, exit code $XRDEXIT"
+    fi
 done
 
+#clean up
+echo "cleaning up"
+cd ${_CONDOR_SCRATCH_DIR_}
+rm -rf CMSSW_10_6_30
+rm cmsswTar.tar.gz
 

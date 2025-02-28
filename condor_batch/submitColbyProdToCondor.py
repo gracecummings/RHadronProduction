@@ -101,6 +101,7 @@ if __name__=='__main__':
                 jdlName = "production_M"+conf[0]+"_"+str(date.today())+".jdl"
                 jdl = open(jdlName,"w")
                 jdl.write("universe = vanilla\n")
+                jdl.write("request_memory=4000\n")
                 jdl.write("Should_Transfer_Files = YES\n")
                 jdl.write("WhenToTransferOutput = ON_EXIT\n")
                 jdl.write("Transfer_Input_Files = "+tarballName+"\n")
