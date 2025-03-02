@@ -2,7 +2,9 @@ import sys
 import os
 import argparse
 import subprocess
+import glob
 from datetime import date
+from random import randint
 
 parser = argparse.ArgumentParser()
 
@@ -30,6 +32,15 @@ if __name__=='__main__':
     if not os.path.exists("condorMonitoringOutput/"+str(date.today())+"/"):
         os.makedirs("condorMonitoringOutput/"+str(date.today())+"/")
 
+    #Check that there is no random crap being transfered
+    if os.path.exists("../SpikedRHadronAnalyzer/data"):
+        print("DATA DIRECTORY FOUND BEFORE MAKING TARBALL -- MIGHT HAVE THINGS TO BREAK")
+    if os.path.exists("../SpikedRHadronAnalyzer/data") and os.path.exists("cmsswTar.tar.gz"):
+        print("... but there is a tarball already made, so it might be fine.")
+    else:
+        print("exiting, make sure to remove spurious files")
+        sys.exit()
+        
     #Tar the working area
     print("Creating tarball of working area")
     tarballName = "cmsswTar.tar.gz"
@@ -57,13 +68,10 @@ if __name__=='__main__':
 
     
     #Submit the jobs
-    #Get list grouped by sample
     jobcnt = 0
     print("Root files are written to {0}".format(eosOnlypath))
 
-    ##I would make args.samplecsv actually a textfile that is a list of the text files you want to make
-    ##then, you read in the list, and make the .jdls in a for loop (everything below in the that loop)
-    ###remember to replace then everywhere w/ args.samplecsv with the read in paht
+    #Read in a sample .csv with the samples and event counts you want to make
     configf = open(args.samplecsv,"r")
     configs = configf.readlines()
     confs = [x.split(',') for x in configs]
@@ -85,16 +93,18 @@ if __name__=='__main__':
 
         print("              Total number of jobs: ",len(eventlist))
 
+        #build the random seeds to generate different events
+        genseeds = [randint(100000000,999999999) for r in range(len(eventlist))]
+        g4seeds  = [randint(10000,99999) for r in range(len(eventlist))]
+        vtxseeds = [randint(100000,999999) for r in range(len(eventlist))]
+
         #do loop through the event list which builds the jobs
         it = 0
-
-        for job in eventlist:
+        for j,job in enumerate(eventlist):
             print("            Building Job {} for {} events.".format(it,job))
             
-    
-    
             #Args to pass
-            argu = "Arguments = {0} {1} {2} {3}".format(conf[0],job,eosForOutput,it)
+            argu = "Arguments = {0} {1} {2} {3} {4} {5} {6}".format(conf[0],job,eosForOutput,it,genseeds[j],g4seeds[j],vtxseeds[j])
             
             if not args.killsubmission:
                 #Make the jdl for each sample
