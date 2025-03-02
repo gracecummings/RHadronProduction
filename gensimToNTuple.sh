@@ -12,7 +12,10 @@ mass=$1 # In GeV
 events=$2
 jobNum=$3
 cmEnergy=13000 # In GeV
-seeded=False
+seeded=True
+genseed=$4
+g4seed=$5
+vtxseed=$6
 eventdisplay=false # Set to true to create CSVs of the R-Hadron energy deposits during simulation for the purpose of an event display
 ntuple=false # Set to true to run the NTuplizer over the RECO file
 
@@ -54,7 +57,7 @@ recoOut=$dir_name"_recoM"$mass"_"$events"Events.out"
 
 if [ ! -f data/$genSimRoot ]; then
     echo "Starting step 0: GEN-SIM"
-    cmsRun EXO-RunIISummer20UL18GENSIM-00010_1_cfg_v3.py maxEvents=$events seeded=$seeded mass=$mass cmEnergy=$cmEnergy outputFile=data/$genSimRoot
+    cmsRun EXO-RunIISummer20UL18GENSIM-00010_1_cfg_v3.py maxEvents=$events seeded=$seeded mass=$mass cmEnergy=$cmEnergy outputFile=data/$genSimRoot genseed=$genseed g4seed=$g4seed vtxseed=$vtxseed
     echo "Step 0 completed"
 else
     echo "Gensim file found printing contents"
