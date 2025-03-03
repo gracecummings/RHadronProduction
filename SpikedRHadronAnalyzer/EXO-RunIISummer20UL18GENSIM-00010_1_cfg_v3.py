@@ -42,6 +42,25 @@ options.register('seeded', False,
     "Whether or not to seed the generator"
 )
 
+#Grace adding hacks
+options.register('genseed',123456789,
+    VarParsing.multiplicity.singleton,
+    VarParsing.varType.int,
+    "Generator Seed"
+)
+
+options.register('g4seed',67890,
+    VarParsing.multiplicity.singleton,
+    VarParsing.varType.int,
+    "GEANT4 Seed"
+)
+
+options.register('vtxseed',345678,
+    VarParsing.multiplicity.singleton,
+    VarParsing.varType.int,
+    "Vertex Smear Seed"
+)
+
 options.parseArguments()
 outputFile = options.outputFile
 stringToReplace = "_numEvent{}".format(options.maxEvents)
@@ -54,9 +73,9 @@ process.maxEvents = cms.untracked.PSet(
 # Handle seeding
 if options.seeded:
     process.load("IOMC.RandomEngine.IOMC_cff")
-    process.RandomNumberGeneratorService.generator.initialSeed = 123456789
-    process.RandomNumberGeneratorService.g4SimHits.initialSeed = 67890
-    process.RandomNumberGeneratorService.VtxSmeared.initialSeed = 345678
+    process.RandomNumberGeneratorService.generator.initialSeed = options.genseed
+    process.RandomNumberGeneratorService.g4SimHits.initialSeed = options.g4seed
+    process.RandomNumberGeneratorService.VtxSmeared.initialSeed = options.vtxseed
     process.rndmStore = cms.EDProducer("RandomEngineStateProducer")
 
 # Input source
@@ -185,7 +204,7 @@ process.generator = cms.EDFilter("Pythia8ConcurrentGeneratorFilter",
     pythiaPylistVerbosity = cms.untracked.int32(0),
     slhaFile = cms.untracked.string('Configuration/Generator/data/HSCP_gluino_1800_SLHA.spc'),
     useregge = cms.bool(False),
-    initialSeed = cms.untracked.uint32(912345678),
+    initialSeed = cms.untracked.uint32(1020),
 #    engineName = cms.untracked.string('TRandom3')
 )
 
