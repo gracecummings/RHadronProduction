@@ -35,9 +35,6 @@ if __name__=='__main__':
     #Check that there is no random crap being transfered
     if os.path.exists("../SpikedRHadronAnalyzer/data"):
         print("DATA DIRECTORY FOUND BEFORE MAKING TARBALL -- MIGHT HAVE THINGS TO BREAK")
-    if os.path.exists("../SpikedRHadronAnalyzer/data") and os.path.exists("cmsswTar.tar.gz"):
-        print("... but there is a tarball already made, so it might be fine.")
-    else:
         print("exiting, make sure to remove spurious files")
         sys.exit()
         
