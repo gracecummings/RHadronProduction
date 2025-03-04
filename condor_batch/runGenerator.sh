@@ -13,7 +13,7 @@ echo "System software: `cat /etc/redhat-release`" #Operating System on that node
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 echo "Untaring  directory with analyzer code"
 tar -xf cmsswTar.tar.gz
-cd CMSSW_10_6_30/src/
+cd CMSSW_10_6_47/src/
 scram b ProjectRename
 cmsenv
 cd RHadronProduction
